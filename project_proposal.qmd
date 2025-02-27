@@ -15,6 +15,14 @@ library(tidyverse)
 library(kableExtra)
 ```
 
+We should load in the data now!
+
+```{r}
+daily_income <- read_csv("mincpcap_cppp.csv")
+high_school_equiv <- read_csv("se_sec_cuat_up_zs.csv")
+ba_equiv <- read_csv("se_ter_cuat_ba_zs.csv")
+```
+
 Sources cited:
 
 Pew Research: Source: [https://www.pewresearch.org/social-trends/2024/05/23/public-views-on-the-value-of-a-college-degree/#:\~:text=The%20importance%20of%20a%20four%2Dyear%20college%20degree,-Four%2Din%2Dten&text=About%20half%20of%20Americans%20(49,importance%20hasn't%20really%20changed.](https://www.pewresearch.org/social-trends/2024/05/23/public-views-on-the-value-of-a-college-degree/#:~:text=The%20importance%20of%20a%20four%2Dyear%20college%20degree,-Four%2Din%2Dten&text=About%20half%20of%20Americans%20(49,importance%20hasn't%20really%20changed.))
