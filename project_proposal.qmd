@@ -5,21 +5,16 @@ format: revealjs
 editor: visual
 ---
 
-## Quarto
+## Project Proposal
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
-
-## Bullets
-
-When you click the **Render** button a document will be generated that includes:
-
--   Content authored with markdown
--   Output from executable code
-
-## Code
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+In our project, we decided to look at the statistical relationship between education and income across all countries. The rising climate in the United States around education seems to be converging towards a negative attitude, with 49% of Americans thinking that it is less important to have a college degree now than it was in the past (Pew Research). We have selected three datasets: a dataset that captures daily income in a price adjusted form, and two datasets showing the attainment of education: high-school equivalent or bachelor's equivalent.
 
 ```{r}
-1 + 1
+library(readr)
+library(tidyverse)
+library(kableExtra)
 ```
+
+Sources cited:
+
+Pew Research: Source: [https://www.pewresearch.org/social-trends/2024/05/23/public-views-on-the-value-of-a-college-degree/#:\~:text=The%20importance%20of%20a%20four%2Dyear%20college%20degree,-Four%2Din%2Dten&text=About%20half%20of%20Americans%20(49,importance%20hasn't%20really%20changed.](https://www.pewresearch.org/social-trends/2024/05/23/public-views-on-the-value-of-a-college-degree/#:~:text=The%20importance%20of%20a%20four%2Dyear%20college%20degree,-Four%2Din%2Dten&text=About%20half%20of%20Americans%20(49,importance%20hasn't%20really%20changed.))
