@@ -7,7 +7,15 @@ editor: visual
 
 ## Project Proposal
 
-In our project, we decided to look at the statistical relationship between education and income across all countries. The rising climate in the United States around education seems to be converging towards a negative attitude, with 49% of Americans thinking that it is less important to have a college degree now than it was in the past (Pew Research). We have selected three datasets: a dataset that captures daily income in a price adjusted form, and two datasets showing the attainment of education: high-school equivalent or bachelor's equivalent.
+For our project, we plan to explore the statistical relationship between education and income across countries. Recent trends in the United States suggest a growing negative attitude toward education, with 49% of Americans believing that a college degree is less important now than in the past (Pew Research). To investigate this, we selected three datasets from GapMinder:
+
+-   mincpcap_cppp.csv: Mean daily household income in 2017 constant international dollars
+
+    -   Note: GapMinder includes a "forecast" in this dataset with predicted values up to the year 2100.
+
+-   se_sec_cuat_up_zs.csv: Percentage of the population with high school (upper secondary school) equivalent attainment
+
+-   se_ter_cuat_ba_zs.csv: Percentage of the population with bachelor's equivalent attainment
 
 ```{r}
 library(readr)
@@ -15,12 +23,43 @@ library(tidyverse)
 library(kableExtra)
 ```
 
-We should load in the data now!
+Load in data:
 
 ```{r}
 daily_income <- read_csv("mincpcap_cppp.csv")
 high_school_equiv <- read_csv("se_sec_cuat_up_zs.csv")
 ba_equiv <- read_csv("se_ter_cuat_ba_zs.csv")
+```
+
+Combine all information into one dataset:
+
+-   Each dataset should be turned into a "long format" so that there is one column for country, one for year, and one for the variable of interest so we can join all data based on the country and Year combination and view the daily income, HS equivalent, and BA equivalent values.
+
+-   Since the last year where real data was recorded was 2023, we will not include years where any value is "predicted" (2024 to 2100).
+
+```{r}
+# create a long version for each dataset
+di_long <- daily_income |> 
+  pivot_longer(cols = '1800':'2100',
+               names_to = "Year",
+               values_to = "DailyIncome")
+ba_long <- ba_equiv |> 
+  pivot_longer(cols = "1970":"2023",
+               names_to = "Year",
+               values_to = "Bachelors_pct")
+hs_long <- high_school_equiv |> 
+  pivot_longer(cols = "1970":"2023",
+               names_to = "Year",
+               values_to= "HighSchool_pct")
+
+# merge all the data (including missing values) from the three datasets,
+# but only keep information from years where real data was recorded (no later 
+# than 2023.)
+gapminder <- di_long |> 
+  full_join(hs_long, by = c("country", "Year")) |> 
+  full_join(ba_long,
+            by = c("country", "Year")) |> 
+  filter(Year < 2024)
 ```
 
 Sources cited:
