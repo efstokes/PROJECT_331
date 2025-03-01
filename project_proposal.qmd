@@ -1,13 +1,23 @@
 ---
 title: "Project Proposal"
 author: "Emily Stokes, Sophia Nicotera, Ben Cox, Wendy Tan"
-format: revealjs
-editor: visual
+format: 
+  html:
+    code-tools: true
+    toc: true
+    embed-resources: true
+    html-table-processing: none
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
 ---
 
 ## Project Proposal
 
-For our project, we plan to explore the statistical relationship between education and income across countries. Recent trends in the United States suggest a growing negative attitude toward education, with 49% of Americans believing that a college degree is less important now than in the past (Pew Research). To investigate this, we selected three datasets from GapMinder:
+For our project, we plan to explore the statistical relationship between education and income across countries. Recent trends in the United States suggest a growing negative attitude toward education, with 49% of Americans believing that a college degree is less important now than in the past (Pew Research). On the contrary to this belief, our hypothesized relationship is that a higher percentage in a bachelor's degree in a country will lead to higher daily income, as the citizens are more informed and equipped with field-related knowledge. To investigate this, we selected three datasets from GapMinder:
 
 -   mincpcap_cppp.csv: Mean daily household income in 2017 constant international dollars
 
