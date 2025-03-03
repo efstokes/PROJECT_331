@@ -1,0 +1,38 @@
+---
+title: "linear_regression"
+author: "Emily Stokes, Sophia Nicotera, Ben Cox, Wendy Tan"
+format: 
+  html:
+    code-tools: true
+    toc: true
+    embed-resources: true
+    html-table-processing: none
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
+code-fold: true
+---
+
+```{r setup}
+library(tidyverse)
+library(knitr)
+library(gganimate)
+```
+
+## Data Visualization
+```{r}
+
+```
+
+## Linear Regression
+```{r}
+
+```
+
+## Model Fit
+```{r}
+
+```
