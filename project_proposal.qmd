@@ -13,6 +13,7 @@ execute:
   echo: true
   message: false
   warning: false
+code-fold: true
 ---
 
 ## Project Proposal
@@ -27,7 +28,7 @@ For our project, we plan to explore the statistical relationship between educati
 
 -   se_ter_cuat_ba_zs.csv: Percentage of the population with bachelor's equivalent attainment
 
-```{r}
+```{r setup}
 library(readr)
 library(tidyverse)
 library(kableExtra)
