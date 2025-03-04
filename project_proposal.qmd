@@ -73,6 +73,24 @@ gapminder <- di_long |>
   filter(Year < 2024)
 ```
 
+## Data Visualization
+
+```{r}
+
+```
+
+## Linear Regression
+
+```{r}
+
+```
+
+## Model Fit
+
+```{r}
+
+```
+
 Sources cited:
 
 Pew Research: Source: [https://www.pewresearch.org/social-trends/2024/05/23/public-views-on-the-value-of-a-college-degree/#:\~:text=The%20importance%20of%20a%20four%2Dyear%20college%20degree,-Four%2Din%2Dten&text=About%20half%20of%20Americans%20(49,importance%20hasn't%20really%20changed.](https://www.pewresearch.org/social-trends/2024/05/23/public-views-on-the-value-of-a-college-degree/#:~:text=The%20importance%20of%20a%20four%2Dyear%20college%20degree,-Four%2Din%2Dten&text=About%20half%20of%20Americans%20(49,importance%20hasn't%20really%20changed.))
