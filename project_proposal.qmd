@@ -76,7 +76,27 @@ gapminder <- di_long |>
 ## Data Visualization
 
 ```{r}
+HS_plot <- gapminder|>
+  ggplot() + 
+  geom_point(aes(x = HighSchool_pct, y = DailyIncome))+
+  geom_smooth(aes(x = HighSchool_pct, y = DailyIncome), 
+              method = "lm")+
+  labs(x = "Percent of High School Equivalent Completion",
+       y = "",
+       subtitle = "Daily Income (PPP Dollars)")
+HS_plot
 
+BA_plot <- gapminder|>
+  ggplot() + 
+  geom_point(aes(x = HighSchool_pct, y = DailyIncome))+
+  geom_smooth(aes(x = Bachelors_pct, y = DailyIncome), 
+              method = "lm") +
+  labs(x = "Percent of Bachelor's Equivalent Completion",
+       y = "",
+       subtitle = "Daily Income (PPP Dollars)")
+BA_plot
+
+#heres the plots, can anyone remember how to put them side by side? I would mix them but like that would be a mess
 ```
 
 ## Linear Regression
