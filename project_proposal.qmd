@@ -103,12 +103,22 @@ BA_plot
 
 ```{r}
 
+bachelors_lm <- lm(DailyIncome ~ Bachelors_pct + HighSchool_pct, 
+                 data = gapminder)
+broom::tidy(bachelors_lm)|>
+  knitr::kable()|>
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+broom::glance(bachelors_lm)|>
+  knitr::kable()|>
+  kable_styling(bootstrap_options = c("striped", "hover"))
+  
 ```
 
 ## Model Fit
 
 ```{r}
-
+summary(bachelors_lm)
 ```
 
 Sources cited:
