@@ -7,6 +7,7 @@ format:
     toc: true
     embed-resources: true
     html-table-processing: none
+    self-contained: true
 editor: source
 execute: 
   error: true
@@ -62,10 +63,11 @@ gapminder <- di_long |>
 
 ## Data Visualization
 
-A scatterplot of each data point in the dataset with a best fit line shows a positive relationship between the percentage of the population who have completed a Bachelor's equivalent education and the average daily household income. However, the correlation does not appear to be very strong because there is a lot of variation in the points.
+A scatterplot of each data point in the dataset (each Country + Year) with a best fit line shows a positive relationship between the percentage of the population who have completed a Bachelor's equivalent education and the average daily household income. However, the correlation does not appear to be very strong because there is a lot of variation in the points.
 
 ```{r}
-gapminder|>
+BA_plot <- gapminder|>
+  mutate(Year = as.numeric(Year)) |> 
   ggplot(mapping = aes(x = Bachelors_pct, y = DailyIncome)) + 
   geom_point()+
   geom_smooth(method = "lm") +
@@ -73,13 +75,21 @@ gapminder|>
        y = "Daily Income (PPP Dollars)",
        title = "Daily Income and Population Bachelor's Attainment")
 
+BA_plot
 
 ```
 
 next
 
 ```{r}
+animate_plot <- BA_plot + transition_time(Year) +
+  labs(subtitle = "Year: {frame_time}") +
+  ease_aes("linear")
 
+animated_plot <- animate(animate_plot, fps = 10, width = 800, height = 600) 
+anim_save("animation.gif", animated_plot)
+
+#Using gganimate- can't get this to render.
 ```
 
 ## Linear Regression
