@@ -18,34 +18,25 @@ code-fold: true
 
 ## Project Proposal
 
-For our project, we plan to explore the statistical relationship between education and income across countries. Recent trends in the United States suggest a growing negative attitude toward education, with 49% of Americans believing that a college degree is less important now than in the past (Pew Research). On the contrary to this belief, our hypothesized relationship is that a higher percentage in a bachelor's degree in a country will lead to higher daily income, as the citizens are more informed and equipped with field-related knowledge. To investigate this, we selected three datasets from GapMinder:
-
--   mincpcap_cppp.csv: Mean daily household income in 2017 constant international dollars
-
-    -   Note: GapMinder includes a "forecast" in this dataset with predicted values up to the year 2100.
-
--   se_sec_cuat_up_zs.csv: Percentage of the population with high school (upper secondary school) equivalent attainment
-
--   se_ter_cuat_ba_zs.csv: Percentage of the population with bachelor's equivalent attainment
+For our project, we plan to explore the statistical relationship between education and income across countries. Recent trends in the United States suggest a growing negative attitude toward education, with 49% of Americans believing that a college degree is less important now than in the past (Pew Research). On the contrary to this belief, our hypothesized relationship is that a higher percentage in a bachelor's degree in a country will lead to higher daily income, as the citizens are more informed and equipped with field-related knowledge. To investigate this, we selected two datasets from GapMinder: (1) Mean daily household income in 2017 constant international dollars (Note: GapMinder includes a "forecast" in this dataset with predicted values up to the year 2100) and (2) Percentage of the population with bachelor's equivalent attainment
 
 ```{r setup}
 library(readr)
 library(tidyverse)
 library(kableExtra)
-library(patchwork)
+library(gganimate)
 ```
 
 Load in data:
 
 ```{r}
 daily_income <- read_csv("mincpcap_cppp.csv")
-high_school_equiv <- read_csv("se_sec_cuat_up_zs.csv")
 ba_equiv <- read_csv("se_ter_cuat_ba_zs.csv")
 ```
 
 Combine all information into one dataset:
 
--   Each dataset should be turned into a "long format" so that there is one column for country, one for year, and one for the variable of interest so we can join all data based on the country and Year combination and view the daily income, HS equivalent, and BA equivalent values.
+-   Each dataset should be turned into a "long format" so that there is one column for country, one for year, and one for the variable of interest so we can join all data based on the country and Year combination and view the daily income and BA equivalent percentage values.
 
 -   Since the last year where real data was recorded was 2023, we will not include years where any value is "predicted" (2024 to 2100).
 
@@ -59,16 +50,11 @@ ba_long <- ba_equiv |>
   pivot_longer(cols = "1970":"2023",
                names_to = "Year",
                values_to = "Bachelors_pct")
-hs_long <- high_school_equiv |> 
-  pivot_longer(cols = "1970":"2023",
-               names_to = "Year",
-               values_to= "HighSchool_pct")
 
 # merge all the data (including missing values) from the three datasets,
 # but only keep information from years where real data was recorded (no later 
 # than 2023.)
 gapminder <- di_long |> 
-  full_join(hs_long, by = c("country", "Year")) |> 
   full_join(ba_long,
             by = c("country", "Year")) |> 
   filter(Year < 2024)
@@ -76,28 +62,23 @@ gapminder <- di_long |>
 
 ## Data Visualization
 
+A scatterplot of each data point in the dataset with a best fit line shows a positive relationship between the percentage of the population who have completed a Bachelor's equivalent education and the average daily household income. However, the correlation does not appear to be very strong because there is a lot of variation in the points.
+
 ```{r}
-library(patchwork)
-HS_plot <- gapminder|>
-  ggplot(mapping = aes(x = HighSchool_pct, y = DailyIncome)) + 
-  geom_point()+
-  geom_smooth(method = "lm")+
-  labs(x = "Percent of Population Completion",
-       y = "Daily Income (PPP Dollars)",
-       title = "High-School Equivalent Acheivement")
-
-
-BA_plot <- gapminder|>
+gapminder|>
   ggplot(mapping = aes(x = Bachelors_pct, y = DailyIncome)) + 
   geom_point()+
   geom_smooth(method = "lm") +
-  labs(x = "Percent of Population Completion",
+  labs(x = "Bachelor's Degree Attainment (Percent of Population)",
        y = "Daily Income (PPP Dollars)",
-       title = "Bachelors Equivalent Achievement")
-HS_plot+BA_plot
+       title = "Daily Income and Population Bachelor's Attainment")
 
-#heres the plots, can anyone remember how to put them side by side? I would mix them but like that would be a mess
-#     PATCHWORK package
+
+```
+
+next
+
+```{r}
 
 ```
 
