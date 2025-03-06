@@ -26,6 +26,7 @@ library(readr)
 library(tidyverse)
 library(kableExtra)
 library(gganimate)
+library(gifski)
 ```
 
 Load in data:
@@ -59,6 +60,11 @@ gapminder <- di_long |>
   full_join(ba_long,
             by = c("country", "Year")) |> 
   filter(Year < 2024)
+
+gapminder <- gapminder |> mutate(Year = as.numeric(Year))
+gapminder <- gapminder |> drop_na(Bachelors_pct, DailyIncome)
+
+
 ```
 
 ## Data Visualization
@@ -66,30 +72,38 @@ gapminder <- di_long |>
 A scatterplot of each data point in the dataset (each Country + Year) with a best fit line shows a positive relationship between the percentage of the population who have completed a Bachelor's equivalent education and the average daily household income. However, the correlation does not appear to be very strong because there is a lot of variation in the points.
 
 ```{r}
-BA_plot <- gapminder|>
-  mutate(Year = as.numeric(Year)) |> 
+x_min <- min(gapminder$Bachelors_pct, na.rm = TRUE)
+x_max <- max(gapminder$Bachelors_pct, na.rm = TRUE)
+y_min <- min(gapminder$DailyIncome, na.rm = TRUE)
+y_max <- max(gapminder$DailyIncome, na.rm = TRUE)
+
+BA_plot <- gapminder |>
   ggplot(mapping = aes(x = Bachelors_pct, y = DailyIncome)) + 
-  geom_point()+
-  geom_smooth(method = "lm") +
+  geom_point(alpha = 0.6, size = 2) + 
+  geom_smooth(method = "lm", color = "blue", se = FALSE) +  
+  scale_x_continuous(limits = c(x_min, x_max)) +  
+  scale_y_continuous(limits = c(y_min, y_max)) +  
   labs(x = "Bachelor's Degree Attainment (Percent of Population)",
        y = "Daily Income (PPP Dollars)",
-       title = "Daily Income and Population Bachelor's Attainment")
-
-BA_plot
+       title = "Daily Income and Population Bachelor's Attainment",
+       subtitle = "Year: {frame_time}") +  
+  theme_minimal() 
 
 ```
 
 next
 
 ```{r}
-animate_plot <- BA_plot + transition_time(Year) +
-  labs(subtitle = "Year: {frame_time}") +
+animate_plot <- BA_plot + 
+  transition_time(Year) + 
   ease_aes("linear")
 
-animated_plot <- animate(animate_plot, fps = 10, width = 800, height = 600) 
+animated_plot <- animate(animate_plot, renderer = gifski_renderer(), fps = 10, width = 1000, height = 700, units = "px") 
+
 anim_save("animation.gif", animated_plot)
 
-#Using gganimate- can't get this to render.
+animated_plot
+
 ```
 
 ## Linear Regression
