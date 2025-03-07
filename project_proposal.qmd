@@ -91,7 +91,7 @@ BA_plot <- gapminder |>
 
 ```
 
-When we look at the relationship between the population percentage with Bachelor's equivalent attainment and daily household income, we notice ther there is not a lot of data before the year 2000, but after the year 2000 there are enough data to form an obvious pattern. From 2000-2008, there are still only a small amount of data points. They form, linear patterns but there is a lot of variation and from year to year the rate of change switched from positive to negative and back. This is most likely explained by the fact that there are not enough datapoints to see a real pattern. Around 2010 and on, there are many points, and the pattern is still linear with smaller deviation from the regression line, but the rate of change between the two variables is constantly positive even though it varies with each year. However, from 2013 on, the rate of change is the most stable, and the line only varies by a small amount each time. We can conclude that over the years since 2000, the relationship between population bachelor's attainment and daily household income has been positive.
+When we look at the relationship between the population percentage with Bachelor's equivalent attainment (explanatory variable) and daily household income (response variable), we notice that there is not a lot of data before the year 2000, but after the year 2000 there are enough data to form an obvious pattern. From 2000-2008, there are still only a small amount of data points. They form, linear patterns but there is a lot of variation and from year to year the rate of change switched from positive to negative and back. This is most likely explained by the fact that there are not enough datapoints to see a real pattern. Around 2010 and on, there are many points, and the pattern is still linear with smaller deviation from the regression line, but the rate of change between the two variables is constantly positive even though it varies with each year. However, from 2013 on, the rate of change is the most stable, and the line only varies by a small amount each time. We can conclude that over the years since 2000, the relationship between population bachelor's attainment and daily household income has been positive.
 
 ```{r}
 animate_plot <- BA_plot + 
@@ -109,15 +109,30 @@ animated_plot
 
 ## Linear Regression
 
+To determine the linear regression model for this data, we have created a mean population Bachelor's attainment percent (explanatory variable) and a mean daily household income (response variable) for each individual country (averaging over all existing years in the dataset since there are some missing values). Based on the linear regression between a country's average Bachelor's attainment percentage (explanatory) and the country's average daily household income (response), we can model the relationship with:
+
+$$
+\hat{Y} = \beta_0 + \beta_1 X
+$$
+
+Where
+
+-    $\hat{Y}$ represents the predicted average income for a country
+
+-    $\beta_0 = 1.6366$ is the y-intercept for average daily income for a country
+
+-    $\beta_1 = 0.3846$ represents the average change in mean daily household income (in PPP dollars) for a country for every 1% increase in the average of the country's population percentage with a bachelor's equivalent attainment (denoted $X$).
+
 ```{r}
-
-bachelors_lm <- lm(DailyIncome ~ Bachelors_pct, 
-                 data = gapminder)
+country_averages <- gapminder |> 
+  group_by(country) |> 
+  summarise(bachelors = mean(Bachelors_pct, na.rm = TRUE),
+            income = mean(DailyIncome, na.rm = TRUE))
+  
+bachelors_lm <- lm(income ~ bachelors, 
+                 data = country_averages)
 broom::tidy(bachelors_lm)|>
-  knitr::kable()|>
-  kable_styling(bootstrap_options = c("striped", "hover"))
-
-broom::glance(bachelors_lm)|>
+  dplyr::mutate(across(where(is.numeric), ~ round(.x, 4)))  |> 
   knitr::kable()|>
   kable_styling(bootstrap_options = c("striped", "hover"))
   
