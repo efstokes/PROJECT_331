@@ -1,5 +1,5 @@
 ---
-title: "Project Proposal"
+title: "STAT 331 Project"
 author: "Emily Stokes, Sophia Nicotera, Ben Cox, Wendy Tan"
 format: 
   html:
@@ -29,7 +29,9 @@ library(gganimate)
 library(gifski)
 ```
 
-Load in data:
+Data Preparation:
+
+We first load and clean the data to ensure consistency and eliminate forecasted values (2024-2100).
 
 ```{r}
 daily_income <- read_csv("mincpcap_cppp.csv")
@@ -107,9 +109,9 @@ animated_plot
 
 ```
 
-## Linear Regression
 
-To determine the linear regression model for this data, we have created a mean population Bachelor's attainment percent (explanatory variable) and a mean daily household income (response variable) for each individual country (averaging over all existing years in the dataset since there are some missing values). Based on the linear regression between a country's average Bachelor's attainment percentage (explanatory) and the country's average daily household income (response), we can model the relationship with:
+## Linear Regression
+We fit a simple linear regression model using the average bachelor's attainment percentage as the explanatory variable and the average daily household income as the response variable for each country (averaging over all existing years in the dataset since there are some missing values). Based on the linear regression between a country's average Bachelor's attainment percentage (explanatory) and the country's average daily household income (response), we can model the relationship with:
 
 $$
 \hat{Income} = 1.9434 + 1.4878(Bachelor's \ Attainment \ \%) 
@@ -139,6 +141,7 @@ broom::tidy(bachelors_lm)|>
 ```
 
 ## Model Fit
+To assess model fit, we calculate the variance in total response values, fitted values, and residuals.
 
 ```{r}
 bachelor_resid = broom::augment(bachelors_lm, conf.level = 0.95)
