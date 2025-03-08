@@ -112,16 +112,16 @@ animated_plot
 To determine the linear regression model for this data, we have created a mean population Bachelor's attainment percent (explanatory variable) and a mean daily household income (response variable) for each individual country (averaging over all existing years in the dataset since there are some missing values). Based on the linear regression between a country's average Bachelor's attainment percentage (explanatory) and the country's average daily household income (response), we can model the relationship with:
 
 $$
-\hat{Y} = \beta_0 + \beta_1 X
+\hat{Income} = 1.9434 + 1.4878(Bachelor's \ Attainment \ \%) 
 $$
 
 Where
 
 -   $\hat{Y}$ represents the predicted average income for a country
 
--   $\beta_0 = 1.6366$ is the y-intercept for average daily income for a country
+-   $\beta_0 = 1.9434$ is the y-intercept for average daily income for a country.
 
--   $\beta_1 = 0.3846$ represents the average change in mean daily household income (in PPP dollars) for a country for every 1% increase in the average of the country's population percentage with a bachelor's equivalent attainment (denoted $X$).
+-   $\beta_1 = 1.4878$ represents the average change in mean daily household income (in PPP dollars) for a country for every 1% increase in the average of the country's population percentage with a bachelor's equivalent attainment.
 
 ```{r}
 country_averages <- gapminder |> 
@@ -158,7 +158,7 @@ bachelor_resid |>
   add_header_above(c(" " = 4))
 ```
 
-To get the results in the table we had to first find three values from the model. Those were the total variance, the variance from the explanatory value, and the variance from the residual. To get them we used the augment() function from the broom package and then got the sum of the variance in the income, .fitted, and .residual variables. Those are the first three values in the table. The final value, the R^2, was gotten by dividing the fitted variance by the total variance. This tells us how much of the the variance in the results can be explained by the model. In the context of the data this shows that in 2017 about 43.6% of the differences in mean daily household income between countries can be explained by differences in educational attainment as measured by the proportion of the population with the equivalent of bachelor's degree. 
+To get the results in the table we had to first find three values from the model. Those were the total variance, the variance from the explanatory value, and the variance from the residual. To get them we used the augment() function from the broom package and then got the sum of the variance in the income, .fitted, and .residual variables. Those are the first three values in the table. The final value, the R\^2, was gotten by dividing the fitted variance by the total variance. This tells us how much of the the variance in the results can be explained by the model. In the context of the data this shows that in 2017 about 43.6% of the differences in mean daily household income between countries can be explained by differences in educational attainment as measured by the proportion of the population with the equivalent of bachelor's degree.
 
 Sources cited:
 
