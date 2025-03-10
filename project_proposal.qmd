@@ -166,3 +166,22 @@ To get the results in the table we had to first find three values from the model
 Sources cited:
 
 Pew Research: Source: [https://www.pewresearch.org/social-trends/2024/05/23/public-views-on-the-value-of-a-college-degree/#:\~:text=The%20importance%20of%20a%20four%2Dyear%20college%20degree,-Four%2Din%2Dten&text=About%20half%20of%20Americans%20(49,importance%20hasn't%20really%20changed.](https://www.pewresearch.org/social-trends/2024/05/23/public-views-on-the-value-of-a-college-degree/#:~:text=The%20importance%20of%20a%20four%2Dyear%20college%20degree,-Four%2Din%2Dten&text=About%20half%20of%20Americans%20(49,importance%20hasn't%20really%20changed.))
+
+## Simulation
+
+```{r}
+set.seed(151)
+
+bachelor_pred = predict(bachelors_lm)
+est_sigma = sigma(bachelors_lm)
+
+rand_error = function(x, mean = 0, sd){
+  x + rnorm(length(x), mean, sd)
+}
+
+bach_sim_resp = tibble(sim_bach = rand_error(x = bachelor_pred, 
+                                               sd = est_sigma))
+
+full_bachelors = country_averages |> 
+  bind_cols(bach_sim_resp)
+```
