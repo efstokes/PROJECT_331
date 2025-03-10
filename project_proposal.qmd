@@ -133,6 +133,7 @@ country_averages <- gapminder |>
   
 bachelors_lm <- lm(income ~ bachelors, 
                  data = country_averages)
+
 broom::tidy(bachelors_lm)|>
   dplyr::mutate(across(where(is.numeric), ~ round(.x, 4)))  |> 
   knitr::kable()|>
@@ -172,16 +173,30 @@ Pew Research: Source: [https://www.pewresearch.org/social-trends/2024/05/23/publ
 ```{r}
 set.seed(151)
 
-bachelor_pred = predict(bachelors_lm)
+prediction = predict(bachelors_lm)
 est_sigma = sigma(bachelors_lm)
 
 rand_error = function(x, mean = 0, sd){
   x + rnorm(length(x), mean, sd)
 }
 
-bach_sim_resp = tibble(sim_bach = rand_error(x = bachelor_pred, 
+bach_sim_resp = tibble(sim_income = rand_error(x = prediction, 
                                                sd = est_sigma))
 
 full_bachelors = country_averages |> 
   bind_cols(bach_sim_resp)
 ```
+
+```{r}
+full_bachelors |> 
+  ggplot()+
+  geom_point(mapping = aes(x = sim_income, y = income))+
+  geom_abline(slope = 1, intercept = 0)+
+  labs(x = "Simulated Income",
+       y = "Observed Income",
+       title = "Simulated vs Observed Income Based on Observed Bachelor's Attainment %")
+```
+
+
+
+
