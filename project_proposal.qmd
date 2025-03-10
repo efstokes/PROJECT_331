@@ -27,6 +27,7 @@ library(tidyverse)
 library(kableExtra)
 library(gganimate)
 library(gifski)
+library(patchwork)
 ```
 
 Data Preparation:
@@ -188,13 +189,25 @@ full_bachelors = country_averages |>
 ```
 
 ```{r}
-full_bachelors |> 
-  ggplot()+
-  geom_point(mapping = aes(x = sim_income, y = income))+
-  geom_abline(slope = 1, intercept = 0)+
+sim_plot <-full_bachelors |> 
+  ggplot(mapping = aes(x = sim_income, y = income))+
+  geom_point(alpha = 0.6, size = 2)+
+  geom_smooth(method = "lm", color = "blue", se = FALSE)+
   labs(x = "Simulated Income",
        y = "Observed Income",
-       title = "Simulated vs Observed Income Based on Observed Bachelor's Attainment %")
+       title = "Simulated vs Observed Income Based on Observed Bachelor's Attainment %")+
+  theme_minimal()
+
+original_plot <- country_averages |> 
+  ggplot(mapping = aes(x = bachelors, y = income))+
+  geom_point(alpha = 0.6, size = 2)+
+  geom_smooth(method = "lm", color = "blue", se = FALSE)+
+  labs(x = "Observed Bachelor's",
+       y = "Observed Income",
+       title = "observed")+
+  theme_minimal()
+
+sim_plot + original_plot
 ```
 
 
