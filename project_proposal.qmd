@@ -196,18 +196,18 @@ sim_plot <-full_bachelors |>
   ggplot(mapping = aes(x = sim_income, y = income))+
   geom_point(alpha = 0.6, size = 2)+
   geom_smooth(method = "lm", color = "blue", se = FALSE)+
-  labs(x = "Simulated Income",
-       y = "Observed Income",
-       title = "Simulated vs Observed Income")+
+  labs(x = "Income",
+       y = "Income",
+       title = "Simulated")+
   theme_minimal()
 
 original_plot <- country_averages |> 
   ggplot(mapping = aes(x = bachelors, y = income))+
   geom_point(alpha = 0.6, size = 2)+
   geom_smooth(method = "lm", color = "blue", se = FALSE)+
-  labs(x = "Observed Bachelors vs Observed Income",
+  labs(x = "Observed Bachelors",
        y = "Observed Income",
-       title = "observed")+
+       title = "Observed")+
   theme_minimal()
 
 sim_plot + original_plot
