@@ -215,7 +215,7 @@ sim_plot + original_plot
 
 ```{r}
 set.seed(256)
-sims = map_dfc(.x = 1:10, 
+sims = map_dfc(.x = 1:1000, 
                .f = ~ tibble(sim = rand_error(x = prediction, 
                                                sd = est_sigma)))
 
@@ -236,7 +236,9 @@ sim_r_sq = sim_r_sq[names(sim_r_sq) != "income"]
 
 tibble(sims = sim_r_sq) |> 
   ggplot(aes(x = sims)) + 
-  geom_histogram() + 
+  geom_histogram(fill = "lightblue", 
+                 color = "darkgray", 
+                 bins = 40) + 
   labs(x = "R² Values", y = "Frequency", 
        title = "Distribution of R² Values from Predictive Checks") +
   theme_minimal()
