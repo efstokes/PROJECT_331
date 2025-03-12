@@ -215,25 +215,31 @@ sim_plot + original_plot
 
 ```{r}
 set.seed(256)
-sims <- map_dfc(1:10, ~ tibble(sim = rand_error(x = prediction, sd = est_sigma)))
+sims = map_dfc(.x = 1:10, 
+               .f = ~ tibble(sim = rand_error(x = prediction, 
+                                               sd = est_sigma)))
 
-colnames(sims) <- str_replace_all(colnames(sims), "\\.\\.\\.", "_")
+colnames(sims) <- colnames(sims) |> 
+  str_replace(pattern = "\\.\\.\\.",
+                  replace = "_")
 
-sims <- bind_cols(tibble(income = country_averages$income), sims)
+sims = country_averages |> 
+  select(income) |> 
+  bind_cols(sims)
 
-sim_r_sq <- sims %>%
-  select(-income) %>%
-  map(~ lm(income ~ ., data = sims)) %>%
-  map(glance) %>%
-  map_dbl("r.squared")
+sim_r_sq = sims |> 
+  map(~ lm(income ~ .x, data = sims)) |> 
+  map(glance) |> 
+  map_dbl(~ .x$r.squared)
 
-r2_plot <- ggplot(tibble(R2 = sim_r_sq), aes(x = R2)) +
-  geom_histogram(bins = 30, fill = "steelblue", alpha = 0.7) +
+sim_r_sq = sim_r_sq[names(sim_r_sq) != "income"]
+
+tibble(sims = sim_r_sq) |> 
+  ggplot(aes(x = sims)) + 
+  geom_histogram() + 
   labs(x = "R² Values", y = "Frequency", 
        title = "Distribution of R² Values from Predictive Checks") +
   theme_minimal()
-
-r2_plot
 
 ```
 
