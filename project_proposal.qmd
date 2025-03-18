@@ -113,8 +113,8 @@ animated_plot
 
 ```
 
-
 ## Linear Regression
+
 We fit a simple linear regression model using the average bachelor's attainment percentage as the explanatory variable and the average daily household income as the response variable for each country (averaging over all existing years in the dataset since there are some missing values). The unit of observation in our regression model is each country, averaged over all available years (2000 and beyond). Only data from 2000 and later was included to ensure consistency and sufficient sample size. Based on the linear regression between a country's average Bachelor's attainment percentage (explanatory) and the country's average daily household income (response), we can model the relationship with:
 
 $$
@@ -146,6 +146,7 @@ broom::tidy(bachelors_lm)|>
 ```
 
 ## Model Fit
+
 To assess model fit, we calculate the variance in total response values, fitted values, and residuals.
 
 ```{r}
@@ -174,6 +175,8 @@ Pew Research: Source: [https://www.pewresearch.org/social-trends/2024/05/23/publ
 
 ## Simulation
 
+In order to gain more information about our linear relationship between Bachelor's degree attainment and income, we can run a simulation based on our model. We first should make a dataset of predicted values based on our linear regression model.
+
 ```{r}
 set.seed(151)
 
@@ -190,6 +193,8 @@ bach_sim_resp = tibble(sim_income = rand_error(x = prediction,
 full_bachelors = country_averages |> 
   bind_cols(bach_sim_resp)
 ```
+
+Now that we have predicted values, we can create a plot to visualize how accurate our values are relative to our original data.
 
 ```{r}
 sim_plot <-full_bachelors |> 
@@ -212,6 +217,8 @@ original_plot <- country_averages |>
 
 sim_plot + original_plot
 ```
+
+$R^2$ provides us with a reliable way to check how much variability in predicted income is explained by the linear relationship between Bachelors' degree attainment and observed income. We can create a histogram to represent the variability and spread of $R^2$ values in our simulated data.
 
 ```{r}
 set.seed(256)
@@ -245,8 +252,4 @@ tibble(sims = sim_r_sq) |>
 
 ```
 
-
-
-
-
-
+There seems to be a approximately normal distribution in $R^2$ values in our predicted income, with a values ranging from 0.05 to 0.35.
