@@ -64,7 +64,7 @@ gapminder <- di_long |>
 
 ## Data Visualization
 
-A scatterplot of each data point in the dataset (each Country + Year) with a best fit line shows a positive relationship between the percentage of the population who have completed a Bachelor's equivalent education and the average daily household income. However, the correlation does not appear to be very strong because there is a lot of variation in the points.
+A scatterplot of each data point in the dataset (each Country + Year) with a best fit line shows a positive relationship between the percentage of the population who have completed a Bachelor's equivalent education and the average daily household income. However, the correlation does not appear to be super strong because there is a lot of variation in the points.
 
 ```{r}
 x_min <- min(gapminder$Bachelors_pct, na.rm = TRUE)
@@ -149,7 +149,7 @@ bachelor_resid |>
   add_header_above(c(" " = 4))
 ```
 
-To get the results in the table we had to first find three values from the model. Those were the total variance, the variance from the explanatory value, and the variance from the residual. To get these values, we extracted the values straight from the fitted model, and then calculated the sum of the variance in the income, fitted, and residual variables. These, respectively, are the first three values in the table. The final value, the $R^2$, was obtained by dividing the fitted variance by the total variance. This tells us how much of the the variance in the results can be explained by the model. In the context of the data this shows that in 2017 about 43.6% of the differences in mean daily household income between countries can be explained by differences in educational attainment as measured by the proportion of the population with the equivalent of bachelor's degree.
+To get the results in the table we had to first find three values from the model. Those were the total variance, the variance explained by Bachelor's attainment percent (explanatory), and the variance of the individual Incomes (residuals). To get these values, we extracted the values straight from the fitted model, and then calculated the sum of the variance in the income, fitted, and residual variables. These, respectively, are the first three values in the table. The final value, the $R^2$, was obtained by dividing the fitted variance by the total variance. This tells us how much of the the variance in the results can be explained by the model. In the context of the data this shows that in 2017, 43.6% of the variation in mean daily household income of countries can be explained by the percent  of the country's population with bachelor's equivalent attainment.
 
 ## Simulation
 
@@ -228,9 +228,10 @@ tibble(sims = sim_r_sq) |>
        title = "Distribution of R² Values from Predictive Checks") +
   theme_minimal()
 
+mean(sim_r_sq)
 ```
 
-There seems to be a approximately normal distribution in $R^2$ values in our predicted income, with a values ranging from 0.05 to 0.35.
+There seems to be an approximately normal distribution in $R^2$ values in our predicted income, with a values ranging from `r round(min(sim_r_sq),3)` to `r round(max(sim_r_sq),3)`. The average $R^2$ is `r round(mean(sim_r_sq),3)` with a standard deviation of `r round(sd(sim_r_sq),3)`.
 
 Sources cited:
 
