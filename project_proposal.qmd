@@ -19,7 +19,7 @@ code-fold: true
 
 ## Project Proposal
 
-For our project, we plan to explore the statistical relationship between education and income across countries. Recent trends in the United States suggest a growing negative attitude toward education, with 49% of Americans believing that a college degree is less important now than in the past (Pew Research). On the contrary to this belief, our hypothesized relationship is that a higher percentage in a bachelor's degree in a country will lead to higher daily income, as the citizens are more informed and equipped with field-related knowledge. To investigate this, we selected two datasets from GapMinder: (1) Mean daily household income in 2017 constant international dollars (Note: GapMinder includes a "forecast" in this dataset with predicted values up to the year 2100) and (2) Percentage of the population with bachelor's equivalent attainment
+For our project, we plan to explore the statistical relationship between education and income across countries. Recent trends in the United States suggest a growing negative attitude toward education, with 49% of Americans believing that a college degree is less important now than in the past (Pew Research). On the contrary to this belief, our hypothesized relationship is that a higher percentage in a bachelor's degree in a country will lead to higher daily income, as the citizens are more informed and equipped with field-related knowledge. To investigate this, we selected two datasets from GapMinder: (1) Mean daily household income in _2017 constant international PPP dollars, which adjusts for inflation as well as the differences between currencies of different countries (Note: GapMinder includes a "forecast" in this dataset with predicted values up to the year 2100) and (2) Percentage of the population with bachelor's equivalent attainment
 
 ```{r setup}
 library(readr)
@@ -33,23 +33,17 @@ library(broom)
 
 Data Preparation:
 
-We first load and clean the data to ensure consistency and eliminate forecasted values (2024-2100).
-
 ```{r}
 daily_income <- read_csv("mincpcap_cppp.csv")
 ba_equiv <- read_csv("se_ter_cuat_ba_zs.csv")
 ```
 
-Combine all information into one dataset:
-
--   Each dataset should be turned into a "long format" so that there is one column for country, one for year, and one for the variable of interest so we can join all data based on the country and Year combination and view the daily income and BA equivalent percentage values.
-
--   Since the last year where real data was recorded was 2023, we will not include years where any value is "predicted" (2024 to 2100).
+Next we needed to combine all information into one dataset to analyze the variables together. Each dataset has a Country/Year pair for each observation of the response, so we can combine the datasets into one large dataset that shows both the income and bachelor's attainment information for each of the Country/Year's. Since the last year where real data was recorded was 2023, we will not include years where any value (daily income) is "forecasted" (2024 to 2100). There is only data recorded for bachelor's attainment beginning in 1970, so we will on only focus our analysis on the years 1970 to 2023, where real data was observed for both of the variables. However, there are 9,636 rows where in a specific Country and Year, either the income, bachelor's attainment, or both are missing. Since we can't use these observations, we removed them.
 
 ```{r}
 # create a long version for each dataset
 di_long <- daily_income |> 
-  pivot_longer(cols = '1800':'2100',
+  pivot_longer(cols = "1800":"2100",
                names_to = "Year",
                values_to = "DailyIncome")
 ba_long <- ba_equiv |> 
@@ -57,18 +51,15 @@ ba_long <- ba_equiv |>
                names_to = "Year",
                values_to = "Bachelors_pct")
 
-# merge all the data (including missing values) from the three datasets,
-# but only keep information from years where real data was recorded (no later 
-# than 2023.)
+# merge all the data from the 2 datasets, but only keep information
+# from years where real data was recorded for both variables (only
+# from 1970 to 2023) 
 gapminder <- di_long |> 
   full_join(ba_long,
             by = c("country", "Year")) |> 
-  filter(Year < 2024)
-
-gapminder <- gapminder |> mutate(Year = as.numeric(Year))
-gapminder <- gapminder |> drop_na(Bachelors_pct, DailyIncome)
-
-
+  mutate(Year = as.numeric(Year)) |> 
+  filter(Year < 2024 & Year >=1970) |> 
+  drop_na(Bachelors_pct, DailyIncome)
 ```
 
 ## Data Visualization
